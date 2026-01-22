@@ -18,6 +18,24 @@ class User(AbstractUser):
     total_points = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    # Override the groups and user_permissions fields to avoid reverse accessor clashes
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        related_name='octofit_user_set',
+        related_query_name='octofit_user',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='user permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_name='octofit_user_set',
+        related_query_name='octofit_user',
+    )
 
     class Meta:
         db_table = 'users'
